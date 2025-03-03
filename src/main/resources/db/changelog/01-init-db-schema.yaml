@@ -1,0 +1,124 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Darvesh Nazar
+changes:
+  # Создание таблицы hotel
+  - createTable:
+      tableName: hotel
+      columns:
+        - column:
+            name: id
+            type: BIGINT
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: name
+            type: VARCHAR(255)
+            constraints:
+              nullable: false
+        - column:
+            name: description
+            type: TEXT
+        - column:
+            name: brand
+            type: VARCHAR(255)
+        - column:
+            name: address_id
+            type: BIGINT
+            constraints:
+              nullable: false
+        - column:
+            name: contact_info_id
+            type: BIGINT
+            constraints:
+              nullable: true
+
+  # Создание таблицы address
+  - createTable:
+      tableName: address
+      columns:
+        - column:
+            name: id
+            type: BIGINT
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: house_number
+            type: INT
+        - column:
+            name: street
+            type: VARCHAR(255)
+        - column:
+            name: city
+            type: VARCHAR(255)
+        - column:
+            name: country
+            type: VARCHAR(255)
+        - column:
+            name: post_code
+            type: VARCHAR(20)
+
+  # Создание таблицы contacts
+  - createTable:
+      tableName: contacts
+      columns:
+        - column:
+            name: id
+            type: BIGINT
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: phone
+            type: VARCHAR(20)
+        - column:
+            name: email
+            type: VARCHAR(255)
+
+  # Создание таблицы amenities
+  - createTable:
+      tableName: amenities
+      columns:
+        - column:
+            name: id
+            type: BIGINT
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: hotel_id
+            type: BIGINT
+            constraints:
+              nullable: false
+        - column:
+            name: amenity
+            type: VARCHAR(255)
+
+  # Добавление внешних ключей
+  - addForeignKeyConstraint:
+      baseTableName: hotel
+      baseColumnNames: address_id
+      referencedTableName: address
+      referencedColumnNames: id
+      constraintName: fk_hotel_address
+
+  - addForeignKeyConstraint:
+      baseTableName: hotel
+      baseColumnNames: contacts_id
+      referencedTableName: contact_info
+      referencedColumnNames: id
+      constraintName: fk_hotel_contacts
+
+  - addForeignKeyConstraint:
+      baseTableName: amenities
+      baseColumnNames: hotel_id
+      referencedTableName: hotel
+      referencedColumnNames: id
+      constraintName: fk_amenities_hotel
